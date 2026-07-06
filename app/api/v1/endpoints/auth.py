@@ -6,6 +6,8 @@ from sqlalchemy.orm import Session
 
 from app.db.dependencies import get_db
 from app.models.user import User
+from app.core.oauth2 import get_current_user
+from fastapi.security import OAuth2PasswordRequestForm
 
 from app.schemas.user import (
     UserCreate,
@@ -73,15 +75,13 @@ def register_user(
     response_model=Token
 )
 def login_user(
-    user_credentials: UserLogin,
+    form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
 
     user = (
         db.query(User)
-        .filter(
-            User.email == user_credentials.email
-        )
+        .filter(User.email == form_data.username)
         .first()
     )
 
@@ -92,7 +92,7 @@ def login_user(
         )
 
     if not verify_password(
-        user_credentials.password,
+        form_data.password,
         user.hashed_password
     ):
         raise HTTPException(
@@ -110,3 +110,12 @@ def login_user(
         "access_token": token,
         "token_type": "bearer"
     }
+
+@router.get(
+    "/me",
+    response_model=UserResponse
+)
+def get_me(
+    current_user: User = Depends(get_current_user)
+):
+    return current_user
