@@ -32,8 +32,8 @@ class Portfolio(Base):
         back_populates="portfolios"
     )
 
-    # holdings = relationship(
-    #     "Holding",
-    #     back_populates="portfolio",
-    #     cascade="all, delete-orphan"
-    # )
+    holdings = relationship(
+        "Holding",
+        back_populates="portfolio",
+        cascade="all, delete-orphan"
+    )
