@@ -3,6 +3,7 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 
 from app.db.session import Base
+from sqlalchemy.orm import relationship
 
 
 class User(Base):
@@ -28,4 +29,10 @@ class User(Base):
     hashed_password: Mapped[str] = mapped_column(
         String(255),
         nullable=False
+    )
+
+    portfolios = relationship(
+    "Portfolio",
+    back_populates="user",
+    cascade="all, delete-orphan"
     )
