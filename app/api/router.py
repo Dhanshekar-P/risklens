@@ -6,6 +6,7 @@ from app.api.v1.endpoints.portfolio import router as portfolio_router
 from app.api.v1.endpoints.holding import router as holding_router
 from app.api.v1.endpoints.market_data import router as market_router
 from app.api.v1.endpoints.risk import router as risk_router
+from app.api.v1.endpoints.ai import router as ai_router
 
 api_router = APIRouter()
 
@@ -26,3 +27,5 @@ api_router.include_router(holding_router)
 api_router.include_router(market_router)
 
 api_router.include_router(risk_router)
+
+api_router.include_router(ai_router)
